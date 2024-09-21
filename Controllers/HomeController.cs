@@ -8,9 +8,12 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    private readonly ExpensesDbContext _context;
+
+    public HomeController(ILogger<HomeController> logger, ExpensesDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     public IActionResult Index()
@@ -35,6 +38,9 @@ public class HomeController : Controller
 
     public IActionResult CreateEditExpenseForm(Expense model)
     {
+        _context.Expenses.Add(model);
+        _context.SaveChanges();
+
         return RedirectToAction("Expenses");
     }
 
